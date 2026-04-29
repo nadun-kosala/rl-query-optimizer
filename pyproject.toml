@@ -1,0 +1,86 @@
+[build-system]
+requires      = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name        = "rl-query-optimizer"
+version     = "0.1.0"
+description = "Reinforcement learning-based PostgreSQL query optimizer"
+readme      = "README.md"
+license     = { text = "MIT" }
+authors     = [{ name = "Kosala Nadun Madanayaka" }]
+requires-python = ">=3.9"
+
+keywords = [
+    "postgresql", "query optimization", "reinforcement learning",
+    "database", "performance", "machine learning",
+]
+
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Database",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    # Pinned to match the training environment exactly.
+    # SB3 and gymnasium have breaking API changes between minor versions —
+    # your trained model was saved with these exact versions and must be
+    # loaded with them.
+    "stable-baselines3==2.1.0",
+    "psycopg2-binary>=2.9.9",
+    "numpy>=1.26.0,<2.0.0",
+    "gymnasium==0.29.1",
+    "torch>=2.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov",
+    "black",
+    "isort",
+    "mypy",
+    "twine>=4.0",
+    "build>=1.0",
+]
+
+[project.urls]
+Homepage   = "https://github.com/nadun-kosala/rl-query-optimizer"
+Repository = "https://github.com/nadun-kosala/rl-query-optimizer"
+Issues     = "https://github.com/nadun-kosala/rl-query-optimizer/issues"
+
+[tool.hatch.build.targets.wheel]
+# Ensures the bundled model file is included in the wheel
+include = [
+    "rl_query_optimizer/**",
+    "rl_query_optimizer/models/*.zip",
+]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "rl_query_optimizer/**",
+    "tests/**",
+    "examples/**",
+    "README.md",
+    "LICENSE",
+    "pyproject.toml",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+
+[tool.black]
+line-length    = 88
+target-version = ["py38", "py39", "py310", "py311"]
+
+[tool.isort]
+profile = "black"
